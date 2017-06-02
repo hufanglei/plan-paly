@@ -1,0 +1,163 @@
+#{extends 'backMain.html' /}
+#{set title:'员工计划查询' /}
+
+
+<div class="panel">
+    <div class="panel-heading">
+        <strong><i class="icon-shield"></i> ${title}</strong>
+    </div>
+    <form action="@{admin.PlansController.queryAll()}" method="post">
+        <table class="table table-hover table-striped" style="margin-bottom: 0px">
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="name">姓名:</label>
+                        <div class="col-sm-10">
+                            <select id="mod" name="searchPlan.user.id"  class="chosen-select form-control"  tabindex="2" >
+                                <option value="">--请选择--</option>
+                            #{list items:userList , as:'user'}
+                                <option value="${user.id}"
+                                    #{if searchPlan?.user?.id == user?.id}
+                                        selected
+                                    #{/if}
+                                        >${user.name}</option>
+                            #{/list}
+                            </select>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="type">计划类型</label>
+                        <div class="col-sm-10">
+                            <select id="mod" name="searchPlan.type"  class="chosen-select form-control"  tabindex="2" >
+                                <option value="">--请选择--</option>
+                            #{list items:types , as : 'type'}
+                                <option value="${type}"
+                                    #{if type.equals(searchPlan?.type)}
+                                        selected
+                                    #{/if}
+                                        >&{'PlanType.'+type}</option>
+                            #{/list}
+                            </select>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="name">开始时间:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-date" name="startTime" value="${startTime}">
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="name">结束时间:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-date"   name="endTime" value="${endTime}">
+                        </div>
+                    </div>
+                </td>
+
+                <td align="right">
+                    <button class="btn btn-primary" type="submit">查询</button>
+                </td>
+            </tr>
+
+        </table>
+
+    </form>
+
+
+    <div class="alert alert-success" style="margin-bottom: 0px">
+        <strong style="color: red">温馨提示：</strong> <span >以上四项 , 请全部选择下奥！</span>
+    </div>
+#{verbatim}
+    <table class="table table-hover table-striped table-bordered" style="margin-bottom: 0px">
+        <thead>
+        <tr class="text-center">
+            <th width='13%'> 生效时间 / 姓名 / 进度 </th>
+            <th width='5%'>计划类型</th>
+            <th width='5%'>所属项目</th>
+            <th width='35%'>计划内容</th>
+            <th width='35%'>计划总结</th>
+            <th width='7%'>操作</th>
+        *{ <th>操作</th>}*
+        </tr>
+        *{#{paginate.list items:addressPage , as :'address'}}*
+            #{list planList , as : 'plan'}
+            <tr>
+                <td> ${plan?.effectTime.format('yyyy-MM-dd')} / ${plan?.user?.name} / &{'WorkRates.'+plan?.workRate}%</td>
+                <td>&{'PlanType.'+plan?.type}</td>
+                <td>${plan?.project?.name}</td>
+                <td>${plan?.content}</td>
+                <td>${plan?.summarize}</td>
+            <td>${plan?.createAt?.format('yyyy-MM-dd')}</td>
+
+            </tr>
+            #{/list}
+        *{#{/paginate.list}}*
+        </thead>
+        <tbody>
+        *{#{if addressPage.pageCount > 1}}*
+        *{<div class="pagination" align="center">}*
+            *{<ul>}*
+                *{#{paginate.controls items:addressPage /}}*
+            *{</ul>}*
+        *{</div>}*
+        *{#{/if}}*
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+    </table>
+
+#{/verbatim}
+</div>
+
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+                <h4 class="modal-title">删除页面</h4>
+            </div>
+
+            <form action="@{admin.PlansController.delete()}" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="palnId" >
+                    <p>是否删除id为<span id="deleteId"></span>计划</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">删除</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function send(planid){
+        $("#palnId").val(planid);
+        $("#deleteId").html(planid);
+    }
+
+    function jumpInto(){
+        window.location.href = "/admin/plans/add";
+    }
+
+    function searchToday(){
+        window.location.href = "/admin/plans/searchToday";
+    }
+
+    function searchWeek(){
+        window.location.href = "/admin/plans/searchWeek";
+    }
+
+    function searchMonth(){
+        window.location.href = "/admin/plans/searchMonth";
+    }
+</script>

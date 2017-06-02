@@ -1,0 +1,497 @@
+#{extends 'backMain.html' /}
+#{set title:'计划管理' /}
+
+<div class="panel">
+    <div class="panel-heading">
+        <strong><i class="icon-shield"></i> ${title} </strong>
+    </div>
+    <form action="#" method="get" >
+        <table class="table table-hover table-striped" style="margin-bottom: 0px">
+        <tr>
+            *{<td>}*
+                *{<div class="btn-group" data-toggle="buttons-radio">}*
+                    *{<button class="btn btn-primary" type="button" onclick="searchToday()">今日计划</button>}*
+                    *{<button class="btn btn-info" type="button" onclick="searchWeek()">本周计划</button>}*
+                    *{<button class="btn btn-warning" type="button" onclick="searchMonth()">本月计划</button>}*
+
+                *{</div>}*
+            *{</td>}*
+            <td align="left">
+                <button class="btn btn-primary" type="button" onclick="jumpInto()" >新增个人计划</button>
+            </td>
+
+            <td align="right">
+
+                    <div class="form-group" style="float: right;">
+                        <div class="col-sm-12">
+                            <select id="mod" name=""  class="chosen-select form-control"  tabindex="2"  onchange="searchWorkmate()">
+                                <option value="">--请选择--</option>
+                            #{list items:userList , as:'user'}
+                                <option value="${user.id}"
+
+                                        >${user.name}</option>
+                            #{/list}
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" type="button" onclick="changeStatus()" >切换 个人/同事计划</button>
+            </td>
+
+            </tr>
+        </table>
+    </form>
+<div id="info">
+    <div id="monthInfo"></div>
+    <div id="weekInfo"></div>
+    <div id="dayInfo"></div>
+</div>
+
+
+
+#{verbatim}
+<div id="myself">
+    <div>
+        <h1 style="color: green; margin-bottom: 0px;margin-top: 0px" class="alert alert-info">月计划</h1>
+        <table class="table table-hover table-bordered"  >
+            <thead>
+            <tr class="text-center">
+                <th width="15%">生效时间 / 姓名 / 进度</th>
+            *{<th>计划类型</th>}*
+                <th width="35%">计划内容</th>
+                <th width="35%">总结</th>
+            *{<th>所属项目</th>}*
+
+            *{<th>进度</th>}*
+                <th width="15%">操作</th>
+            </tr>
+            *{#{paginate.list items:addressPage , as :'address'}}*
+                #{list MonthPlans , as : 'plan'}
+                <tr>
+                    <td>${plan?.effectTime?.format('yyyy-MM-dd')} / ${plan?.user?.name}  / &{'WorkRates.'+plan?.workRate}%</td>
+                    <td>${plan?.content}</td>
+                    <td>${plan?.summarize}</td>
+                    <td>
+                        <a href="@{admin.PlansController.look(plan?.id)}" >查看</a>
+                        /
+                        <a href="@{admin.PlansController.edit(plan?.id)}" >编辑</a>
+                        /
+                        <a href="#deleteModal"  onclick="send(${plan?.id})" data-toggle="modal" >删除</a>
+                    </td>
+                </tr>
+                #{/list}
+
+            </tbody>
+            <tfoot>
+
+            </tfoot>
+        </table>
+    </div>
+    <div>
+        <h1 style="color: green; margin-bottom: 0px;margin-top: 0px" class="alert alert-info">周计划</h1>
+        <table class="table table-hover table-bordered"  >
+            <thead>
+            <tr class="text-center" >
+                <th width="15%">生效时间 / 进度</th>
+                *{/ 姓名 / 计划类型}*
+            *{<th>计划类型</th>}*
+                <th width="35%">计划内容</th>
+                <th width="35%">总结</th>
+            *{<th>所属项目</th>}*
+
+            *{<th>进度</th>}*
+                <th width="15%">操作</th>
+            </tr>
+            *{#{paginate.list items:addressPage , as :'address'}}*
+                #{list WeekPlans , as : 'plan'}
+                <tr>
+                    <td>${plan?.effectTime?.format('yyyy-MM-dd')} / ${plan?.user?.name}/ &{'WorkRates.'+plan?.workRate}%</td>
+                    <td>${plan?.content}</td>
+                    <td>${plan?.summarize}</td>
+                    <td>
+                        <a href="@{admin.PlansController.look(plan?.id)}" >查看</a>
+                        /
+                        <a href="@{admin.PlansController.edit(plan?.id)}" >编辑</a>
+                        /
+                        <a href="#deleteModal"  onclick="send(${plan?.id})" data-toggle="modal" >删除</a>
+                    *{#{/if}}*
+                    </td>
+                </tr>
+                #{/list}
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+    </div>
+    <h1 style="color: green; margin-bottom: 0px;margin-top: 0px" class="alert alert-info">日计划</h1>
+    <table class="table table-hover table-bordered"  >
+        <thead>
+        <tr class="text-center">
+            <th width="15%">生效时间 / 姓名 / 进度</th>
+            *{<th>计划类型</th>}*
+            <th width="35%">计划内容</th>
+            <th width="35%">总结</th>
+            *{<th>所属项目</th>}*
+
+            *{<th>进度</th>}*
+            <th width="15%">操作</th>
+        </tr>
+        *{#{paginate.list items:addressPage , as :'address'}}*
+        #{list planList , as : 'plan'}
+        <tr>
+            <td>${plan?.effectTime?.format('yyyy-MM-dd')} / ${plan?.user?.name} / &{'WorkRates.'+plan?.workRate}%</td>
+            <td>${plan?.content}</td>
+            <td>${plan?.summarize}</td>
+            <td>
+               <a href="@{admin.PlansController.edit(plan?.id)}" >编辑</a>
+                /
+                <a href="#deleteModal"  onclick="send(${plan?.id})" data-toggle="modal" >删除</a>
+            *{#{/if}}*
+            </td>
+        </tr>
+        #{/list}
+
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+    </table>
+</div>
+</div>
+#{/verbatim}
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+                <h4 class="modal-title">删除页面</h4>
+            </div>
+
+            <form action="@{admin.PlansController.delete()}" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="palnId" >
+                    <p>是否删除id为<span id="deleteId"></span>的用户</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">删除</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function send(planid){
+        $("#palnId").val(planid);
+        $("#deleteId").html(planid);
+    }
+
+    function jumpInto(){
+         window.location.href = "@{admin.PlansController.add}";
+    }
+
+    function searchToday(){
+        window.location.href = "/admin/plans/searchToday";
+    }
+
+    function searchWeek(){
+        window.location.href = "/admin/plans/searchWeek";
+    }
+
+    function searchMonth(){
+        window.location.href = "/admin/plans/searchMonth";
+    }
+
+    function searchWorkmate(){
+        $("#myself").hide();
+        $("#info").show();
+        $.ajax({
+            url : "@{admin.PlansController.searchWorkmate()}",
+            data : {"userId" :$("#mod").val()},
+            type: "POST",
+            dataType : 'json' ,
+            success:function(result){
+                    var da= $.parseJSON(result.plans);
+                    $("#dayInfo").html("");
+                    var html="<h1 style='color: green; margin-bottom: 0px;margin-top: 0px' class='alert alert-info'>同事日计划</h1>";
+                    html += "<table class='table table-hover table-bordered' ";
+                    html +="<tr>";
+                    html += "<th width='20%'>生效时间 / 姓名 / 进度</th>";
+                    html += "<th width='40%'>计划内容</th>";
+                    html += "<th width='40%'>总结</th>";
+                    html += "</tr>";
+                        $.each(da , function(i , item){
+//                            if(item.size()==0){
+//                                $("#dayInfo").html(result.msg);
+//                            }
+                            html +="<tr>";
+                            var time = item.effectTime;
+                            var data = new Date(time);
+                            var year = data.getFullYear();  //获取年
+                            var month = data.getMonth() + 1;    //获取月
+                            var day = data.getDate(); //获取日
+                            time = year + "-" + month + "-" + day ;
+                            var type = item.type;
+                            switch(type){
+                                case "DAYPLAN":
+                                    type = "日计划";
+                                     break;
+                                case "WEEKPLAN":
+                                    type =  "周计划";
+                                    break;
+                                case "MONTHPLAN":
+                                    type = "月计划";
+                                    break;
+                                default :
+                                    type ="未填写";
+                                    break;
+                            }
+                            var rate = item.workRate;
+                            switch(rate){
+                                case "ZERO":
+                                    rate = "0%";
+                                    break;
+                                case "ONE":
+                                    rate = "10%";
+                                    break;
+                                case "TWO":
+                                    rate =  "20%";
+                                    break;
+                                case "THREE":
+                                    rate = "30%";
+                                    break;
+                                case "FOUR":
+                                    rate = "40%";
+                                    break;
+                                case "FIVE":
+                                    rate =  "50%";
+                                    break;
+                                case "SIX":
+                                    rate = "60%";
+                                    break;
+                                case "SEVEN":
+                                    rate = "70%";
+                                    break;
+                                case "EIGHT":
+                                    rate =  "80%";
+                                    break;
+                                case "NINE":
+                                    rate = "90%";
+                                    break;
+                                case "TEN":
+                                    rate = "100%";
+                                    break;
+                                default :
+                                    rate ="未填写";
+                                    break;
+                            }
+                            var content = item.content;
+                            if(content == null){
+                                content = "";
+                            }
+                            var summarize = item.summarize;
+                            if(summarize == null){
+                                summarize = "";
+                            }
+                            html += "<td>" + time+ "/" + item.user.name +
+                                     "/" + rate  +  "</td>";
+                            html += "<td>" + content + "</td>";
+                            html += "<td>" + summarize + "</td>";
+
+                           html += "</tr>";
+                        });
+                    html +="</table>";
+
+                    $("#dayInfo").append(html);
+                var weekda= $.parseJSON(result.WeekPlans);
+                $("#weekInfo").html("");
+
+                var html="<h1 style='color: green; margin-bottom: 0px;margin-top: 0px' class='alert alert-info'>同事周计划</h1>";
+                html += "<table class='table table-hover table-bordered' ";
+                html +="<tr>";
+                html += "<th width='20%'>生效时间 / 姓名 / 进度</th>";
+                html += "<th width='40%'>计划内容</th>";
+                html += "<th width='40%'>总结</th>";
+                html += "</tr>";
+                $.each(weekda , function(i , item){
+                    html +="<tr>";
+                    var time = item.effectTime;
+                    var data = new Date(time);
+                    var year = data.getFullYear();  //获取年
+                    var month = data.getMonth() + 1;    //获取月
+                    var day = data.getDate(); //获取日
+                    time = year + "-" + month + "-" + day ;
+                    var type = item.type;
+                    switch(type){
+                        case "DAYPLAN":
+                            type = "日计划";
+                            break;
+                        case "WEEKPLAN":
+                            type =  "周计划";
+                            break;
+                        case "MONTHPLAN":
+                            type = "月计划";
+                            break;
+                        default :
+                            type ="未填写";
+                            break;
+                    }
+                    var rate = item.workRate;
+                    switch(rate){
+                        case "ZERO":
+                            rate = "0%";
+                            break;
+                        case "ONE":
+                            rate = "10%";
+                            break;
+                        case "TWO":
+                            rate =  "20%";
+                            break;
+                        case "THREE":
+                            rate = "30%";
+                            break;
+                        case "FOUR":
+                            rate = "40%";
+                            break;
+                        case "FIVE":
+                            rate =  "50%";
+                            break;
+                        case "SIX":
+                            rate = "60%";
+                            break;
+                        case "SEVEN":
+                            rate = "70%";
+                            break;
+                        case "EIGHT":
+                            rate =  "80%";
+                            break;
+                        case "NINE":
+                            rate = "90%";
+                            break;
+                        case "TEN":
+                            rate = "100%";
+                            break;
+                        default :
+                            rate ="未填写";
+                            break;
+                    }
+                    var content = item.content;
+                    if(content == null){
+                        content = "";
+                    }
+                    var summarize = item.summarize;
+                    if(summarize == null){
+                        summarize = "";
+                    }
+                    html += "<td>" + time+ "/" + item.user.name +
+                    "/" + rate  +  "</td>";
+                    html += "<td>" + content + "</td>";
+                    html += "<td>" + summarize + "</td>";
+
+                    html += "</tr>";
+                });
+                html +="</table>";
+                $("#weekInfo").append(html);
+
+                var monthda= $.parseJSON(result.MonthPlans);
+                $("#monthInfo").html("");
+
+                var html="<h1 style='color: green; margin-bottom: 0px;margin-top: 0px' class='alert alert-info'>同事月计划</h1>";
+                html += "<table class='table table-hover table-bordered' ";
+                html +="<tr>";
+                html += "<th width='20%'>生效时间 / 姓名 / 进度</th>";
+                html += "<th width='40%'>计划内容</th>";
+                html += "<th width='40%'>总结</th>";
+                html += "</tr>";
+                $.each(monthda , function(i , item){
+                    html +="<tr>";
+                    var time = item.effectTime;
+                    var data = new Date(time);
+                    var year = data.getFullYear();  //获取年
+                    var month = data.getMonth() + 1;    //获取月
+                    var day = data.getDate(); //获取日
+                    time = year + "-" + month + "-" + day ;
+                    var type = item.type;
+                    switch(type){
+                        case "DAYPLAN":
+                            type = "日计划";
+                            break;
+                        case "WEEKPLAN":
+                            type =  "周计划";
+                            break;
+                        case "MONTHPLAN":
+                            type = "月计划";
+                            break;
+                        default :
+                            type ="未填写";
+                            break;
+                    }
+                    var rate = item.workRate;
+                    switch(rate){
+                        case "ZERO":
+                            rate = "0%";
+                            break;
+                        case "ONE":
+                            rate = "10%";
+                            break;
+                        case "TWO":
+                            rate =  "20%";
+                            break;
+                        case "THREE":
+                            rate = "30%";
+                            break;
+                        case "FOUR":
+                            rate = "40%";
+                            break;
+                        case "FIVE":
+                            rate =  "50%";
+                            break;
+                        case "SIX":
+                            rate = "60%";
+                            break;
+                        case "SEVEN":
+                            rate = "70%";
+                            break;
+                        case "EIGHT":
+                            rate =  "80%";
+                            break;
+                        case "NINE":
+                            rate = "90%";
+                            break;
+                        case "TEN":
+                            rate = "100%";
+                            break;
+                        default :
+                            rate ="未填写";
+                            break;
+                    }
+                    var content = item.content;
+                    if(content == null){
+                        content = "";
+                    }
+                    var summarize = item.summarize;
+                    if(summarize == null){
+                        summarize = "";
+                    }
+                    html += "<td>" + time+ "/" + item.user.name +
+                    "/" + rate  +  "</td>";
+                    html += "<td>" + content + "</td>";
+                    html += "<td>" + summarize + "</td>";
+                    html += "</tr>";
+                });
+                html +="</table>";
+                $("#monthInfo").append(html);
+
+            }
+        });
+    }
+
+    function changeStatus(){
+        $("#info").slideToggle("slow");
+        $("#myself").slideToggle("slow");
+    }
+
+
+</script>

@@ -1,0 +1,4 @@
+self: play -> weic_cache_helper 1.0.1
+
+require:
+    - play 1.2.7

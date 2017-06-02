@@ -1,0 +1,13 @@
+self: play -> weic_paginate_ext 0.1
+
+require:
+    - play 1.2.7
+    - play1 -> paginate head
+
+repositories:
+
+    - play1ContributedModules:
+        type: http
+        artifact: "http://dev.txpc.cn/play/modules/[module]-[revision].zip"
+        contains:
+            - play1 -> *

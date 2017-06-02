@@ -1,0 +1,57 @@
+#{extends 'backMain.html' /}
+#{set title:'查看同事信息' /}
+
+<div class="panel">
+    <div class="panel-heading">
+        <strong><i class="icon-plus"></i>&nbsp;${title}</strong>
+    </div>
+    <div class="panel-body">
+        <form action="" method="get" class="form-horizontal">
+            <fieldset>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="name">姓名</label>
+                    <div class="col-sm-3">
+                        <input type="text"   value="${user?.name}"  readonly  class="form-control "/>
+                    </div>
+                </div>
+                *{<div class="form-group">}*
+                    *{<label class="col-sm-2 control-label" for="name">密码</label>}*
+                    *{<div class="col-sm-3">}*
+                        *{<select id="mod" name="address.type"  class="chosen-select form-control"  tabindex="2" >}*
+                            *{<option value="">--请选择--</option>}*
+                            *{<option value="STARTSTATION">出发站地址</option>}*
+                            *{<option value="HOTEL">饭店地址</option>}*
+                            *{<option value="CITY">城市地址</option>}*
+                            *{<option value="COMPANY">公司地址</option>}*
+                        *{</select>}*
+                    *{</div>}*
+                *{</div>}*
+                *{<div class="form-group">}*
+                    *{<label class="col-sm-2 control-label" for="name">密码</label>}*
+                    *{<div class="col-sm-3">}*
+                        *{<input type="password"  readonly  value="${user?.password}"  class="form-control "/>}*
+                    *{</div>}*
+                *{</div>}*
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="name">电话</label>
+                    <div class="col-sm-3">
+                        <input type="text"   value="${user?.phone}" readonly  class="form-control "/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="name">地址</label>
+                    <div class="col-sm-3">
+                        <input type="text"  value="${user?.address}"  readonly class="form-control "/>
+                    </div>
+                </div>
+                <div class="form-group" style="padding-top:30px">
+                    <div class="col-sm-offset-2 col-sm-10">
+
+                        <button id="cancel" type="reset" class="btn btn-primary" onclick="history.go(-1)">返回</button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,99 @@
+/**
+* The admin css file of chanzhiEPS.
+*
+* @copyright   Copyright 2013-2013 青岛息壤网络信息有限公司 (QingDao XiRang Network Infomation Co,LTD www.xirangit.com)
+ * @license     LGPL
+* @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+* @package     chanzhiEPS
+* @version     $Id:style.css 1454 2009-10-23 01:45:26Z wwccss $
+* @link        http://www.chanzhi.org
+ */
+
+/* global settings. */
+body {padding-top:60px; padding-bottom:60px;background: #fff;}
+.row-main {padding: 0 10px;}
+
+/* body-content */
+#body-content {margin: 0;}
+#body-content > div {transition: all .8s cubic-bezier(0.175,0.885,0.32,1);}
+
+/* left menu. */
+.leftmenu {width: 15%;}
+.leftmenu.affix {top:60px;}
+.leftmenu.affix-bottom {position:absolute; top:auto; bottom:270px;}
+.leftmenu > .category-nav, .leftmenu > .nav {width: 100%; margin-bottom: 20px; box-shadow:0px 2px 1px rgba(0,0,0,0.15);}
+.leftmenu > .category-nav > .panel-body {overflow-y: auto;}
+/* panel */
+.panel {box-shadow:0px 2px 1px rgba(0,0,0,0.1);}
+.panel .table-bordered {border:none; margin-bottom: 0;}
+.panel .table-bordered > thead > tr:first-child th,.panel .table-bordered > tbody > tr:first-child th,.panel .table-bordered > tr:first-child th {border-top: 0;}
+.panel .table-bordered tr > td:first-child,.panel .table-bordered tr > th:first-child {border-left: 0;}
+.panel .table-bordered tr > td:last-child,.panel .table-bordered tr > th:last-child {border-right: 0;}
+
+/* image */
+.image-small{max-height:100px; max-width:100px;}
+
+/* settings for article create and edit page. */
+#summary  {background:#fff; margin-bottom:0; padding:4px 6px;}
+#keywords {margin-top:0}
+
+/* set css for tablesorter. */
+table.tablesorter thead tr div{padding:0; margin:0}
+table.tablesorter thead tr .header{cursor:pointer;}
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {color:#2973EA;}
+table.tablesorter thead tr .headerSortDown a, table.tablesorter thead tr .headerSortUp a {color:#2973EA}
+table.tablesorter thead tr .header a,table.tablesorter thead tr .headerSortUp a,table.tablesorter thead tr .headerSortDown a{display: inline-block; text-decoration:none}
+table.tablesorter thead tr .header a{color:#707070;}
+table.tablesorter thead tr .header:after {font-family: ZenIcon; font-weight: normal;content: " \e6bd";font-size: 14px;}
+table.tablesorter thead tr .headerSortUp:after {font-family: ZenIcon; font-weight: normal;content: " \e6b9";font-size: 14px;color:#2973EA;}
+table.tablesorter thead tr .headerSortDown:after{font-family: ZenIcon; font-weight: normal;content: " \e6b8";font-size: 14px;color:#2973EA;}
+
+
+
+/* responsive. */
+@media(max-width:998px) {.affix{position: inherit;} .leftmenu.affix{top: 0; width: 100%; margin-bottom: 20px;}}
+@media(max-width:768px){body{padding-bottom: 0;} .navbar-fixed-bottom{display: none;}}
+@media (min-width: 992px) {.navbar-collapse .navbar-nav:first-child {margin-left: 0;}}
+
+/* help-inline */
+.help-inline {display: block;margin: 7px 0;color: #666}
+
+/* navbar */
+#mainNavbar .navbar-collapse .navbar-nav.navbar-right:last-child {margin-right: 0;}
+#mainNavbar .navbar-brand {top: 0px; position: relative;}
+@media (max-width: 767px) {
+    #mainNavbar .navbar-collapse .navbar-nav > li > a {padding-left: 15px; padding-right: 15px;}
+    #mainNavbar .navbar-brand {display: block; top: 3px}
+}
+#navbarSwitcher {display: none;}
+@media screen and (min-width:768px) and (max-width:1210px)
+{
+    #mainNavbar .navbar-collapse .navbar-nav > li > a {padding-left: 12px; padding-right: 12px; transition:all 0.5s;}
+    #mainNavbar .mainNavbarNav {height: 40px;overflow:hidden;}
+    #navbarSwitcher {display: block;}
+    #mainNavbar .navbar-collapse .navbar-nav > li.simple-mode-b > a {width: 0;padding: 0;opacity: 0}
+    #mainNavbar .navbar-collapse .navbar-nav > li.simple-mode-a > a {width: inherit; padding-left: 12px; padding-right: 12px; opacity: 1}
+    #mainNavbar.navbar-simple .navbar-collapse .navbar-nav > li.simple-mode-a > a {width: 0;padding: 0;opacity: 0}
+    #mainNavbar.navbar-simple .navbar-collapse .navbar-nav > li.simple-mode-b > a {width: inherit;padding: 11px 12px;opacity: 1}
+    #mainNavbar.navbar-simple #navbarSwitcher .icon-chevron-sign-right:before {content: '\e70f'}
+}
+@media screen and (min-width:768px) and (max-width:991px)
+{
+    #mainNavbar.navbar-simple .navbar-collapse .navbar-nav > li.simple-mode-b > a,#mainNavbar .navbar-collapse .navbar-nav > li.simple-mode-a > a {padding-left: 8px; padding-right: 8px;}
+    #mainNavbar .navbar-nav.navbar-right > li > a {padding-left: 4px; padding-right: 4px; font-size: 12px;}
+    #navbarSwitcher a {padding-left: 5px;padding-right: 5px;}
+}
+
+.icon-lg:before, .icon-large:before {
+    font-size: 1.33333333em;
+    vertical-align: -10%;
+}
+
+/* 用户界面 */
+.user-control-nav{margin-bottom: 20px;}
+@media (max-width: 480px) { .hidden-xxs {display: none} .page {font-size: 12px}}
+@media (max-width: 400px) { .hidden-xxxs {display: none}}
+.panel{margin: 0 15px 0 0;}
+.panel-actions > form {max-width: 400px;}
+.panel-actions > form .input-group{margin-top: 3px;}
+.panel-actions > form .input-group .btn{margin: 0;}

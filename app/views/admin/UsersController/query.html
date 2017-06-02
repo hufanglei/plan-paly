@@ -1,0 +1,119 @@
+#{extends 'backMain.html' /}
+#{set title:'员工信息' /}
+
+
+<div class="panel">
+    <div class="panel-heading">
+        <strong><i class="icon-shield"></i> ${title}</strong>
+    </div>
+    <form action="@{admin.UsersController.doQuery()}" method="post">
+        <table class="table table-hover table-striped" style="margin-bottom: 0px">
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label" for="name">姓名:</label>
+                        <div class="col-sm-3">
+                            <select id="mod" name="userId"  class="chosen-select form-control"  tabindex="2" >
+                                <option value="">--请选择--</option>
+                            #{list items:userList , as:'user'}
+                                <option value="${user.id}"
+                                    #{if userId == user?.id}  }
+                                        selected
+                                    #{/if}
+                                        >${user.name}</option>
+                            #{/list}
+                            </select>
+                        </div>
+                    </div>
+                </td>
+
+                <td align="right">
+                    <button class="btn btn-primary" type="submit">查询</button>
+                #{if session.get("type").equals("MANAGER") }
+                  <button class="btn btn-primary" type="button" onclick="jumpInto()">新增</button>
+                #{/if}
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
+        <tr class="text-center">
+            <th>ID</th>
+            <th>姓名</th>
+            *{<th>电话</th>}*
+            *{<th>地址</th>}*
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+        *{#{paginate.list items:addressPage , as :'address'}}*
+        *{#{list userList , as : 'user'}}*
+        <tr>
+            <td>${searchUser?.id}</td>
+            <td>${searchUser?.name}</td>
+            *{<td>${user?.phone}</td>}*
+            *{<td>${user?.address}</td>}*
+            <td>${searchUser?.createAt?.format('yyyy-MM-dd HH:mm:ss')}</td>
+            <td>
+                <a href="@{admin.UsersController.look(searchUser?.id)}" >查看</a>
+                #{if searchUser?.id == Long.valueOf(session.get("userId"))  }
+               / <a href="@{admin.UsersController.edit(searchUser?.id)}" >修改</a>
+                #{/if}
+            #{if session.get("type").equals("管理员") }
+                /
+                <a href="#deleteModal"  onclick="send(${searchUser?.id})" data-toggle="modal" >删除</a>
+            #{/if}
+
+            </td>
+        </tr>
+        *{#{/list}}*
+        *{#{/paginate.list}}*
+        </thead>
+        <tbody>
+        *{#{if addressPage.pageCount > 1}}*
+        *{<div class="pagination" align="center">}*
+            *{<ul>}*
+                *{#{paginate.controls items:addressPage /}}*
+            *{</ul>}*
+        *{</div>}*
+        *{#{/if}}*
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+    </table>
+</div>
+
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+                <h4 class="modal-title">删除页面</h4>
+            </div>
+
+            <form action="@{admin.UsersController.delete()}" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="userId" >
+                    <p>是否删除id为<span id="deleteId"></span>的用户</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">删除</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function send(userid){
+        $("#userId").val(userid);
+        $("#deleteId").html(userid);
+    }
+
+    function jumpInto(){
+         window.location.href = "/admin/users/add";
+    }
+</script>

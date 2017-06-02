@@ -1,0 +1,27 @@
+# You can specialize this file for each language.
+# For example, for French create a messages.fr file
+#
+
+#=============用户类型==================
+UsersType.MANAGER=管理员
+UsersType.COMMON=普通员工
+
+
+#=============计划类型==================
+PlanType.DAYPLAN=日计划
+PlanType.WEEKPLAN=周计划
+PlanType.MONTHPLAN=月计划
+
+#=============工作进度==================
+WorkRates.ZERO=0
+WorkRates.ONE=10
+WorkRates.TWO=20
+WorkRates.THREE=30
+WorkRates.FOUR=40
+WorkRates.FIVE=50
+WorkRates.SIX=60
+WorkRates.SEVEN=70
+WorkRates.EIGHT=80
+WorkRates.NINE=90
+WorkRates.TEN=100
+

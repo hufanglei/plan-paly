@@ -1,0 +1,84 @@
+#{extends 'backMain.html' /}
+#{set title:'计划页面' /}
+
+<div class="panel">
+    <div class="panel-heading">
+        <strong><i class="icon-shield"></i> ${title}</strong>
+    </div>
+    <form action="@{admin.PlansController.searchWorkmate()}" method="get" >
+
+        <table class="table table-hover table-striped" style="margin-bottom: 0px">
+            <tr>
+                <td>
+                </td>
+
+                <td align="right">
+                        <div class="form-group" style="float: right;">
+                            <div class="col-sm-12">
+                                <select id="mod" name="userId"  class="chosen-select form-control"  tabindex="2" >
+                                    <option value="">--请选择--</option>
+                                #{list items:userList , as:'user'}
+                                    <option value="${user.id}"
+                                    #{if userId == user?.id}
+                                    selected
+                                    #{/if}
+                                            >${user.name}</option>
+                                #{/list}
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-success" type="submit" >查询同事计划</button>
+                </from>
+                </td>
+
+            </tr>
+        </table>
+        </form>
+
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
+        <tr class="text-center">
+            <th>ID</th>
+            <th>姓名</th>
+            <th>计划类型</th>
+            <th>所属项目</th>
+            <th>工作进度</th>
+            <th>生效时间</th>
+
+        </tr>
+        *{#{paginate.list items:addressPage , as :'address'}}*
+        #{list planList , as : 'plan'}
+        <tr>
+            <td>${plan_index}</td>
+            <td>${plan?.user?.name}</td>
+            <td>&{'PlanType.'+plan?.type}</td>
+            <td>${plan?.project?.name}</td>
+            <td>&{'WorkRates.'+plan?.workRate}%</td>
+            <td>${plan?.effectTime?.format('yyyy-MM-dd HH:mm:ss')}</td>
+
+            <td>
+                <a href="@{admin.PlansController.look(plan?.id)}" >查看详情</a>
+            </td>
+        </tr>
+        #{/list}
+        *{#{/paginate.list}}*
+        </thead>
+        <tbody>
+        *{#{if addressPage.pageCount > 1}}*
+        *{<div class="pagination" align="center">}*
+            *{<ul>}*
+                *{#{paginate.controls items:addressPage /}}*
+            *{</ul>}*
+        *{</div>}*
+        *{#{/if}}*
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+    </table>
+</div>
+<div align="left">
+    *{<a href="@{admin.PlansController.index();"  class="btn btn-primary"></a>}*
+    *{<button class="btn btn-primary" type="button"  onclick="@{admin.PlansController.index()}">返回</button>}*
+    <a href="@{admin.PlansController.index()}" class="btn btn-primary">返回</a>
+</div>

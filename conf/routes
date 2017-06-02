@@ -1,0 +1,31 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                       Application.index
+
+# 用户管理
+GET   /admin/users                           admin.UsersController.index
+POST  /admin/users/query                     admin.UsersController.query
+GET   /admin/users/{username}/{password}     admin.UsersController.login
+GET   /admin/users/add                       admin.UsersController.add
+
+# 计划管理
+GET   /admin/plans                             admin.PlansController.index
+GET   /admin/plans/add                         admin.PlansController.add
+GET   /admin/plans/searchToday                 admin.PlansController.searchToday
+GET   /admin/plans/searchWeek                  admin.PlansController.searchWeek
+GET   /admin/plans/searchMonth                 admin.PlansController.searchMonth
+GET   /admin/plans/queryIndex                  admin.PlansController.queryIndex
+GET  /admin/plans/searchWorkmate/{userId}      admin.PlansController.searchWorkmate
+
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}
